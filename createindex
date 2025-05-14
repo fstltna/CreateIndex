@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+use File::Next;
+
+my $templatefile = <<'END_TEMPLATE';
+<html><body bgcolor="#FFFFFF"></body></html>
+END_TEMPLATE
+my $file = "";
+
+sub CreateIndex
+{
+	my $OutputFile = "$file/index.html";
+	if (-f $OutputFile)
+	{
+		print "$OutputFile already exists - skipping\n";
+		next;
+	}
+	open(FH, '>', $OutputFile) or die $!;
+	print FH "$templatefile";
+	close(FH);
+}
+my $iter = File::Next::dirs( '.' );
+while ( defined ( $file = $iter->() ) )
+{
+	if ($file eq ".")
+	{
+		next;
+	}
+	CreateIndex();
+}
+
+exit 0;
