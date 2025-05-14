@@ -62,12 +62,17 @@ sub CreateIndex
 	}
 	if ($Confirm eq "yes")
 	{
-		print "About to create $OutputFile - Confirm: Y/n: ";
+		print "About to create $OutputFile - Confirm: Y/n/q: ";
 		my $entered = <STDIN>;
 		chop($entered);
 		if ($entered eq "n")
 		{
 			return;
+		}
+		if ($entered eq "q")
+		{
+			print "Quiting...\n";
+			exit 0;
 		}
 	}
 	open(FH, '>', $OutputFile) or die $!;
