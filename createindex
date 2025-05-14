@@ -5,6 +5,19 @@ my $templatefile = <<'END_TEMPLATE';
 <html><body bgcolor="#FFFFFF"></body></html>
 END_TEMPLATE
 my $file = "";
+my $DEBUG_MODE = "off";
+
+sub PrintDebugCommand
+{
+        if ($DEBUG_MODE eq "off")
+        {
+                return;
+        }
+        my $PassedString = shift;
+        print "$PassedString\n";
+	#print "Press Enter To Run This:";
+	#my $entered = <STDIN>;
+}
 
 sub CreateIndex
 {
@@ -21,10 +34,16 @@ sub CreateIndex
 my $iter = File::Next::dirs( '.' );
 while ( defined ( $file = $iter->() ) )
 {
-	if ($file eq ".")
+	if (substr($file, 0, 1) eq ".")
 	{
 		next;
 	}
+	if (index($file, ".git") != -1)
+	{
+		PrintDebugCommand("$file contains .git");
+		next;
+	}
+	PrintDebugCommand("saw $file");
 	CreateIndex();
 }
 
