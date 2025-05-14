@@ -6,6 +6,7 @@ my $templatefile = <<'END_TEMPLATE';
 END_TEMPLATE
 my $file = "";
 my $DEBUG_MODE = "off";
+my $Confirm = "yes";
 
 sub PrintDebugCommand
 {
@@ -26,6 +27,16 @@ sub CreateIndex
 	{
 		print "$OutputFile already exists - skipping\n";
 		next;
+	}
+	if ($Confirm eq "yes")
+	{
+		print "About to create $OutputFile - Confirm: Y/n: ";
+		my $entered = <STDIN>;
+		chop($entered);
+		if ($entered eq "n")
+		{
+			return;
+		}
 	}
 	open(FH, '>', $OutputFile) or die $!;
 	print FH "$templatefile";
