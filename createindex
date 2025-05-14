@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+use strict;
+use warnings;
 use File::Next;
 
 my $templatefile = <<'END_TEMPLATE';
@@ -7,6 +9,10 @@ END_TEMPLATE
 my $file = "";
 my $DEBUG_MODE = "off";
 my $Confirm = "yes";
+my $VERSION = "1.0.0";
+
+print "createindex - index.html file creator v$VERSION\n";
+print "===============================================\n";
 
 sub PrintDebugCommand
 {
@@ -26,7 +32,7 @@ sub CreateIndex
 	if (-f $OutputFile)
 	{
 		print "$OutputFile already exists - skipping\n";
-		next;
+		return;
 	}
 	if ($Confirm eq "yes")
 	{
@@ -42,6 +48,30 @@ sub CreateIndex
 	print FH "$templatefile";
 	close(FH);
 }
+
+my ($NoConfirm) = @ARGV;
+if (defined $NoConfirm)
+{
+	if ($NoConfirm eq "noconfirm")
+	{
+		$Confirm = "no";
+	}
+	else
+        {
+		print "Unknown option. Valid options are:\n";
+		print "\tnoconfirm\t- Don't confirm each creation\n";
+		print "\thelp\t\t- displays this message\n";
+		print "\tdebug\t\t- turns on debug mode\n";
+		exit 0;
+        }
+
+}
+
+if ($Confirm eq "no")
+{
+	print "No comfirmations\n";
+}
+
 my $iter = File::Next::dirs( '.' );
 while ( defined ( $file = $iter->() ) )
 {
